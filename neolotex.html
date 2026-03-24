@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeoLotex — Beyond Digitization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --B: #0A70B8;
+      --BD: #0E2B82;
+      --N: #0A1B44;
+      --R: #E33F3F;
+      --RD: #C0302F;
+      --W: #FFFFFF;
+      --F: #F5F8FD;
+      --F2: #EBF2FA;
+      --T: #0A1B44;
+      --TL: #4D637E;
+      --TM: #8FA8C4;
+      --ease: .38s cubic-bezier(.25, .46, .45, .94);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--W);
+      color: var(--T);
+      overflow-x: hidden
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--B);
+      border-radius: 4px
+    }
+
+    /* ══════════ NAV ══════════ */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6vw;
+      background: var(--W);
+      border-bottom: 1px solid rgba(10, 112, 184, 0.12);
+      box-shadow: 0 2px 20px rgba(10, 27, 68, 0.06);
+    }
+
+    .nav-logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+      color: var(--N);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0
+    }
+
+    .nl-neo {
+      color: var(--B)
+    }
+
+    .nl-dot {
+      color: var(--R);
+      margin: 0 1px
+    }
+
+    .nl-tex {
+      color: var(--N)
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2px;
+      list-style: none
+    }
+
+    .nav-links a {
+      padding: .4rem .85rem;
+      font-size: .73rem;
+      font-weight: 500;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--TL);
+      text-decoration: none;
+      border-radius: 4px;
+      transition: color var(--ease), background var(--ease)
+    }
+
+    .nav-links a:hover {
+      color: var(--B);
+      background: rgba(10, 112, 184, .07)
+    }
+
+    .nav-cta {
+      background: var(--B);
+      color: #fff;
+      padding: .5rem 1.4rem;
+      border-radius: 5px;
+      font-family: 'Poppins', sans-serif;
+      font-size: .73rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background var(--ease), transform .15s, box-shadow .15s;
+      box-shadow: 0 3px 14px rgba(10, 112, 184, .28)
+    }
+
+    .nav-cta:hover {
+      background: var(--BD);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(10, 112, 184, .35)
+    }
+
+    .hbg {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer
+    }
+
+    .hbg span {
+      width: 22px;
+      height: 2px;
+      background: var(--N);
+      border-radius: 2px
+    }
+
+    /* ══════════ HERO ══════════ */
+    #home {
+      min-height: 100vh;
+      padding-top: 64px;
+      display: flex;
+      align-items: center;
+      background: var(--W);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* soft blue wash top-right */
+    .hero-wash {
+      position: absolute;
+      right: -10%;
+      top: -15%;
+      width: 65vw;
+      height: 70vh;
+      background: radial-gradient(ellipse at 70% 30%, rgba(10, 112, 184, .07) 0%, rgba(10, 43, 130, .04) 40%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* subtle dot grid */
+    .hero-dots {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(10, 112, 184, .12) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse 60% 80% at 80% 40%, black 0%, transparent 70%);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      width: 100%;
+      padding: 0 6vw;
+    }
+
+    .hero-left {}
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--B);
+      margin-bottom: 24px;
+      animation: fadeUp .6s ease both;
+    }
+
+    .hero-eyebrow .pip {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--R);
+      animation: pulse 2s ease infinite
+    }
+
+    .hero-h1 {
+      font-size: clamp(2.6rem, 4.2vw, 4.4rem);
+      font-weight: 800;
+      line-height: 1.08;
+      color: var(--N);
+      animation: fadeUp .65s ease .08s both;
+    }
+
+    .hero-h1 .blue {
+      color: var(--B)
+    }
+
+    .hero-h1 .red {
+      color: var(--R)
+    }
+
+    .hero-h1 .thin {
+      font-weight: 200;
+      font-size: .52em;
+      display: block;
+      margin-top: 10px;
+      color: var(--TM);
+      letter-spacing: .06em
+    }
+
+    .hero-sub {
+      margin-top: 22px;
+      max-width: 480px;
+      font-size: .92rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--TL);
+      animation: fadeUp .65s ease .16s both;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      margin-top: 32px;
+      animation: fadeUp .65s ease .24s both;
+      flex-wrap: wrap
+    }
+
+    .btn-blue {
+      background: var(--B);
+      color: #fff;
+      padding: .8rem 2rem;
+      border-radius: 5px;
+      font-family: 'Poppins', sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(10, 112, 184, .3);
+      transition: background var(--ease), transform .15s, box-shadow .15s
+    }
+
+    .btn-blue:hover {
+      background: var(--BD);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(10, 112, 184, .38)
+    }
+
+    .btn-line {
+      background: transparent;
+      color: var(--B);
+      padding: .8rem 2rem;
+      border-radius: 5px;
+      font-family: 'Poppins', sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1.5px solid rgba(10, 112, 184, .35);
+      cursor: pointer;
+      transition: border-color var(--ease), background var(--ease), color var(--ease), transform .15s
+    }
+
+    .btn-line:hover {
+      border-color: var(--B);
+      background: rgba(10, 112, 184, .06);
+      transform: translateY(-2px)
+    }
+
+    /* hero right — floating stat cards */
+    .hero-right {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      animation: fadeUp .65s ease .32s both
+    }
+
+    .hstat {
+      background: var(--W);
+      border: 1px solid rgba(10, 112, 184, .14);
+      border-radius: 10px;
+      padding: 24px 20px;
+      box-shadow: 0 4px 24px rgba(10, 27, 68, .07);
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+
+    .hstat:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(10, 27, 68, .12)
+    }
+
+    .hstat:nth-child(2) {
+      margin-top: 28px
+    }
+
+    .hstat:nth-child(4) {
+      margin-top: 28px
+    }
+
+    .hstat-num {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--N)
+    }
+
+    .hstat-num .sup {
+      font-size: .45em;
+      color: var(--R);
+      vertical-align: super
+    }
+
+    .hstat-lbl {
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--TM);
+      margin-top: 6px
+    }
+
+    .hstat-note {
+      font-size: .74rem;
+      font-weight: 300;
+      color: var(--TL);
+      margin-top: 3px;
+      line-height: 1.4
+    }
+
+    /* ══════════ SECTION BASE ══════════ */
+    .sec {
+      padding: 96px 6vw
+    }
+
+    .sec-light {
+      background: var(--W)
+    }
+
+    .sec-soft {
+      background: var(--F)
+    }
+
+    .sec-mid {
+      background: var(--F2)
+    }
+
+    .stag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .63rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--B);
+      margin-bottom: 12px
+    }
+
+    .stag::before {
+      content: '';
+      width: 24px;
+      height: 2px;
+      background: var(--R);
+      border-radius: 2px;
+      flex-shrink: 0
+    }
+
+    .stitle {
+      font-size: clamp(1.9rem, 3vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.18;
+      color: var(--N)
+    }
+
+    .stitle span {
+      color: var(--B)
+    }
+
+    .stitle .r {
+      color: var(--R)
+    }
+
+    .sdesc {
+      margin-top: 10px;
+      font-size: .88rem;
+      font-weight: 300;
+      color: var(--TL);
+      line-height: 1.85;
+      max-width: 540px
+    }
+
+    /* ══════════ SERVICES ══════════ */
+    #services .svc-grid {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(10, 112, 184, .1);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(10, 112, 184, .1);
+    }
+
+    .svc {
+      background: var(--W);
+      padding: 36px 30px;
+      position: relative;
+      overflow: hidden;
+      transition: background var(--ease), transform var(--ease);
+    }
+
+    .svc::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--B), var(--BD));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--ease)
+    }
+
+    .svc:hover {
+      background: var(--F);
+      transform: translateY(-3px)
+    }
+
+    .svc:hover::after {
+      transform: scaleX(1)
+    }
+
+    .svc-num {
+      font-size: 3rem;
+      font-weight: 800;
+      color: rgba(10, 112, 184, .08);
+      line-height: 1;
+      margin-bottom: 16px;
+      transition: color var(--ease)
+    }
+
+    .svc:hover .svc-num {
+      color: rgba(10, 112, 184, .18)
+    }
+
+    .svc-ico {
+      font-size: 1.6rem;
+      margin-bottom: 14px
+    }
+
+    .svc-title {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--N);
+      margin-bottom: 8px
+    }
+
+    .svc-desc {
+      font-size: .82rem;
+      font-weight: 300;
+      color: var(--TL);
+      line-height: 1.72
+    }
+
+    .svc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--B);
+      text-decoration: none
+    }
+
+    /* ══════════ PRODUCTS ══════════ */
+    #products .prod-scroll {
+      overflow-x: auto;
+      padding-bottom: 16px;
+      cursor: grab;
+      margin-top: 52px
+    }
+
+    #products .prod-scroll:active {
+      cursor: grabbing
+    }
+
+    #products .prod-scroll::-webkit-scrollbar {
+      height: 3px
+    }
+
+    #products .prod-scroll::-webkit-scrollbar-thumb {
+      background: var(--B)
+    }
+
+    .prod-track {
+      display: flex;
+      gap: 20px;
+      width: max-content
+    }
+
+    .pcard {
+      width: 280px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(10, 112, 184, .12);
+      background: var(--W);
+      box-shadow: 0 4px 20px rgba(10, 27, 68, .07);
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+
+    .pcard:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 18px 44px rgba(10, 27, 68, .13)
+    }
+
+    .pcard-top {
+      padding: 26px 24px 20px;
+      background: linear-gradient(140deg, var(--F2) 0%, rgba(10, 112, 184, .06) 100%);
+      border-bottom: 1px solid rgba(10, 112, 184, .1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pcard-top::before {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: -20px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: rgba(10, 112, 184, .07);
+    }
+
+    .pcard-ico {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1
+    }
+
+    .pcard-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--N);
+      line-height: 1;
+      position: relative;
+      z-index: 1
+    }
+
+    .pcard-name em {
+      color: var(--B);
+      font-style: normal
+    }
+
+    .pcard-type {
+      font-size: .6rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--TM);
+      margin-top: 6px;
+      position: relative;
+      z-index: 1
+    }
+
+    .pcard-body {
+      padding: 20px 24px 24px
+    }
+
+    .pcard-desc {
+      font-size: .8rem;
+      font-weight: 300;
+      color: var(--TL);
+      line-height: 1.72;
+      margin-bottom: 14px
+    }
+
+    .pcard-feats {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px
+    }
+
+    .pcard-feats li {
+      font-size: .75rem;
+      font-weight: 400;
+      color: var(--TL);
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .pcard-feats li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--B);
+      flex-shrink: 0
+    }
+
+    /* ══════════ INDUSTRIES ══════════ */
+    #industries .ind-grid {
+      margin-top: 52px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+    }
+
+    .icard {
+      background: var(--W);
+      border: 1px solid rgba(10, 112, 184, .12);
+      border-radius: 10px;
+      padding: 28px 20px 24px;
+      text-align: center;
+      box-shadow: 0 2px 14px rgba(10, 27, 68, .05);
+      transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease), background var(--ease);
+    }
+
+    .icard:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(10, 112, 184, .13);
+      border-color: rgba(10, 112, 184, .3);
+      background: var(--F)
+    }
+
+    .icard-ico {
+      font-size: 2rem;
+      margin-bottom: 12px
+    }
+
+    .icard-name {
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--N);
+      letter-spacing: .02em
+    }
+
+    .icard-note {
+      font-size: .72rem;
+      font-weight: 300;
+      color: var(--TM);
+      margin-top: 5px;
+      line-height: 1.5
+    }
+
+    /* ══════════ ABOUT ══════════ */
+    #about .about-grid {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .about-left .astats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .astat {
+      background: var(--W);
+      border: 1px solid rgba(10, 112, 184, .12);
+      border-radius: 10px;
+      padding: 28px 22px;
+      box-shadow: 0 2px 14px rgba(10, 27, 68, .05);
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+
+    .astat::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--B), var(--R))
+    }
+
+    .astat:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(10, 27, 68, .1)
+    }
+
+    .astat.span2 {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--N), var(--BD))
+    }
+
+    .astat.span2 .astat-num {
+      color: #fff
+    }
+
+    .astat.span2 .astat-lbl {
+      color: rgba(255, 255, 255, .45)
+    }
+
+    .astat.span2 .astat-sub {
+      color: rgba(255, 255, 255, .35)
+    }
+
+    .astat-num {
+      font-size: 2.6rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--N);
+      display: flex;
+      align-items: baseline;
+      gap: 2px
+    }
+
+    .astat-num .s {
+      font-size: .45em;
+      color: var(--R)
+    }
+
+    .astat-lbl {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--TM);
+      margin-top: 8px
+    }
+
+    .astat-sub {
+      font-size: .72rem;
+      font-weight: 300;
+      color: var(--TL);
+      margin-top: 3px
+    }
+
+    .about-right {}
+
+    .about-story p {
+      font-size: .88rem;
+      font-weight: 300;
+      color: var(--TL);
+      line-height: 1.9;
+      margin-bottom: 14px
+    }
+
+    .about-pts {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 0
+    }
+
+    .apt {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(10, 27, 68, .07);
+      transition: padding-left var(--ease);
+    }
+
+    .apt:hover {
+      padding-left: 6px
+    }
+
+    .apt:last-child {
+      border-bottom: none;
+      padding-bottom: 0
+    }
+
+    .apt-ico {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--F2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .95rem;
+      flex-shrink: 0;
+      margin-top: 1px
+    }
+
+    .apt-title {
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--N);
+      margin-bottom: 3px
+    }
+
+    .apt-desc {
+      font-size: .79rem;
+      font-weight: 300;
+      color: var(--TL);
+      line-height: 1.65
+    }
+
+    /* ══════════ TESTIMONIALS ══════════ */
+    #testimonials .tgrid {
+      margin-top: 52px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .tcard {
+      background: var(--W);
+      border: 1px solid rgba(10, 112, 184, .11);
+      border-radius: 10px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(10, 27, 68, .06);
+      transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tcard:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 44px rgba(10, 27, 68, .11);
+      border-color: rgba(10, 112, 184, .22)
+    }
+
+    .tcard-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 16px
+    }
+
+    .tcard-stars span {
+      font-size: .82rem;
+      color: #F59E0B
+    }
+
+    .tcard-hl {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--N);
+      margin-bottom: 12px;
+      line-height: 1.45
+    }
+
+    .tcard-hl .red {
+      color: var(--R)
+    }
+
+    .tcard-txt {
+      font-size: .82rem;
+      font-weight: 300;
+      color: var(--TL);
+      line-height: 1.8;
+      flex: 1
+    }
+
+    .tcard-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(10, 27, 68, .07)
+    }
+
+    .tav {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--B), var(--BD));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .95rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0
+    }
+
+    .ta-name {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--N)
+    }
+
+    .ta-org {
+      font-size: .72rem;
+      font-weight: 300;
+      color: var(--TM);
+      margin-top: 1px
+    }
+
+    /* ══════════ CONTACT ══════════ */
+    #contact {
+      background: var(--W)
+    }
+
+    #contact .contact-layout {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .cinfo-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .cicard {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--F);
+      border: 1px solid rgba(10, 112, 184, .1);
+      border-radius: 8px;
+      padding: 18px 20px;
+      transition: border-color var(--ease), transform var(--ease);
+    }
+
+    .cicard:hover {
+      border-color: rgba(10, 112, 184, .3);
+      transform: translateX(4px)
+    }
+
+    .ci-ico {
+      width: 38px;
+      height: 38px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--B), var(--BD));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .88rem;
+      color: #fff;
+      flex-shrink: 0
+    }
+
+    .ci-lbl {
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--B);
+      margin-bottom: 2px
+    }
+
+    .ci-val {
+      font-size: .83rem;
+      font-weight: 400;
+      color: var(--TL);
+      line-height: 1.55
+    }
+
+    .ci-val a {
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--ease)
+    }
+
+    .ci-val a:hover {
+      color: var(--B)
+    }
+
+    .csocials {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px
+    }
+
+    .csoc {
+      width: 38px;
+      height: 38px;
+      border-radius: 7px;
+      border: 1.5px solid rgba(10, 112, 184, .18);
+      background: var(--W);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--TL);
+      text-decoration: none;
+      box-shadow: 0 2px 10px rgba(10, 27, 68, .06);
+      transition: background var(--ease), color var(--ease), border-color var(--ease), transform .15s;
+    }
+
+    .csoc:hover {
+      background: var(--B);
+      color: #fff;
+      border-color: var(--B);
+      transform: translateY(-3px)
+    }
+
+    .cform-card {
+      background: var(--F);
+      border: 1px solid rgba(10, 112, 184, .12);
+      border-radius: 10px;
+      padding: 36px;
+      box-shadow: 0 4px 24px rgba(10, 27, 68, .07);
+    }
+
+    .cform-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--N);
+      margin-bottom: 4px
+    }
+
+    .cform-sub {
+      font-size: .8rem;
+      font-weight: 300;
+      color: var(--TL);
+      margin-bottom: 28px
+    }
+
+    .cform {
+      display: flex;
+      flex-direction: column;
+      gap: 16px
+    }
+
+    .cff {
+      display: flex;
+      flex-direction: column;
+      gap: 7px
+    }
+
+    .cff label {
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--TL)
+    }
+
+    .cff input {
+      background: var(--W);
+      border: 1.5px solid rgba(10, 112, 184, .18);
+      color: var(--T);
+      font-family: 'Poppins', sans-serif;
+      font-size: .87rem;
+      font-weight: 400;
+      border-radius: 6px;
+      padding: .85rem 1rem;
+      outline: none;
+      transition: border-color var(--ease), box-shadow var(--ease);
+    }
+
+    .cff input::placeholder {
+      color: var(--TM);
+      font-weight: 300
+    }
+
+    .cff input:focus {
+      border-color: var(--B);
+      box-shadow: 0 0 0 3px rgba(10, 112, 184, .1)
+    }
+
+    .csubmit {
+      background: linear-gradient(135deg, var(--R), var(--RD));
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: .95rem 2rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 4px;
+      box-shadow: 0 4px 18px rgba(227, 63, 63, .25);
+      transition: transform .15s, box-shadow .15s, background var(--ease);
+    }
+
+    .csubmit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(227, 63, 63, .35);
+      background: var(--R)
+    }
+
+    .cform-note {
+      font-size: .67rem;
+      font-weight: 300;
+      color: var(--TM);
+      text-align: center;
+      margin-top: 4px
+    }
+
+    /* ══════════ BAND ══════════ */
+    .band {
+      background: linear-gradient(135deg, var(--N) 0%, var(--BD) 100%);
+      padding: 60px 6vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 28px;
+    }
+
+    .band-text {}
+
+    .band-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3
+    }
+
+    .band-title span {
+      color: var(--B)
+    }
+
+    .band-sub {
+      font-size: .85rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, .55);
+      margin-top: 6px
+    }
+
+    .band-btns {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap
+    }
+
+    .band-btn1 {
+      background: var(--B);
+      color: #fff;
+      padding: .75rem 1.8rem;
+      border-radius: 5px;
+      font-family: 'Poppins', sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(10, 112, 184, .4);
+      transition: background var(--ease), transform .15s
+    }
+
+    .band-btn1:hover {
+      background: #0860a0;
+      transform: translateY(-2px)
+    }
+
+    .band-btn2 {
+      background: rgba(255, 255, 255, .1);
+      color: #fff;
+      padding: .75rem 1.8rem;
+      border-radius: 5px;
+      font-family: 'Poppins', sans-serif;
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1.5px solid rgba(255, 255, 255, .2);
+      cursor: pointer;
+      transition: background var(--ease), border-color var(--ease), transform .15s
+    }
+
+    .band-btn2:hover {
+      background: rgba(255, 255, 255, .18);
+      border-color: rgba(255, 255, 255, .5);
+      transform: translateY(-2px)
+    }
+
+    /* ══════════ FOOTER ══════════ */
+    footer {
+      background: var(--F);
+      border-top: 1px solid rgba(10, 112, 184, .1);
+      padding: 56px 6vw 28px
+    }
+
+    .ft-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(10, 27, 68, .08)
+    }
+
+    .ft-logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--N);
+      margin-bottom: 14px;
+      display: block
+    }
+
+    .ft-logo .bl {
+      color: var(--B)
+    }
+
+    .ft-logo .rd {
+      color: var(--R)
+    }
+
+    .ft-about {
+      font-size: .8rem;
+      font-weight: 300;
+      color: var(--TL);
+      line-height: 1.78;
+      max-width: 250px
+    }
+
+    .ft-h {
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--B);
+      margin-bottom: 16px
+    }
+
+    .ft-ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px
+    }
+
+    .ft-ul a {
+      font-size: .8rem;
+      font-weight: 300;
+      color: var(--TL);
+      text-decoration: none;
+      transition: color var(--ease)
+    }
+
+    .ft-ul a:hover {
+      color: var(--B)
+    }
+
+    .ft-bottom {
+      margin-top: 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px
+    }
+
+    .ft-copy {
+      font-size: .72rem;
+      font-weight: 300;
+      color: var(--TM)
+    }
+
+    .ft-legal {
+      display: flex;
+      gap: 20px
+    }
+
+    .ft-legal a {
+      font-size: .72rem;
+      font-weight: 300;
+      color: var(--TM);
+      text-decoration: none;
+      transition: color var(--ease)
+    }
+
+    .ft-legal a:hover {
+      color: var(--B)
+    }
+
+    /* ══════════ ANIMATIONS ══════════ */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .5;
+        transform: scale(1.6)
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    /* ══════════ RESPONSIVE ══════════ */
+    @media(max-width:960px) {
+      .nav-links {
+        display: none
+      }
+
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, .98);
+        padding: 10px 6vw 18px;
+        border-bottom: 1px solid rgba(10, 112, 184, .12);
+        z-index: 499;
+        box-shadow: 0 8px 24px rgba(10, 27, 68, .08)
+      }
+
+      .hbg {
+        display: flex
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding-bottom: 60px
+      }
+
+      .hero-right {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px
+      }
+
+      .hstat:nth-child(2),
+      .hstat:nth-child(4) {
+        margin-top: 0
+      }
+
+      #services .svc-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      #about .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px
+      }
+
+      #contact .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 40px
+      }
+
+      .ft-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px
+      }
+    }
+
+    @media(max-width:640px) {
+      #services .svc-grid {
+        grid-template-columns: 1fr
+      }
+
+      .hero-right {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .ft-grid {
+        grid-template-columns: 1fr
+      }
+
+      #about .astats {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .astat.span2 {
+        grid-column: span 2
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a class="nav-logo" href="#home"><img src="img/NeoLotex-Logo-Recreation-Jpeg-01-500x138.jpg.bv.webp" alt="" style="width: 130px;"></a>
+        
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#industries">Industries</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#testimonials">Clients</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:14px">
+      <a class="nav-cta" href="#contact">Let's Talk</a>
+      <div class="hbg" id="hbg" onclick="toggleNav()"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home">
+    <div class="hero-wash"></div>
+    <div class="hero-dots"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <!-- <div class="hero-eyebrow"><span class="pip"></span>Intelligent Automation Partner · Est. 2010</div> -->
+        <h1 class="hero-h1">
+          Smarter Business<br>
+          Starts with<br>
+          <span class="blue">Better Data.</span>
+          <span class="thin">Beyond Digitization — Beyond Expectations</span>
+        </h1>
+        <p class="hero-sub">NeoLotex empowers enterprises with intelligent document management, workflow automation and
+          digital transformation — turning information into your biggest competitive edge.</p>
+        <div class="hero-btns">
+          <a class="btn-blue" href="#services">Explore Solutions</a>
+          <a class="btn-line" href="#contact">Schedule a Demo</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hstat">
+          <div class="hstat-num">200<span class="sup">+</span></div>
+          <div class="hstat-lbl">Projects</div>
+          <div class="hstat-note">Enterprise-grade delivery</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num">130<span class="sup">M</span></div>
+          <div class="hstat-lbl">Files Digitized</div>
+          <div class="hstat-note">Cumulative records processed</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num">300<span class="sup">%</span></div>
+          <div class="hstat-lbl">TAT Improvement</div>
+          <div class="hstat-note">Avg. turnaround reduction</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num">70<span class="sup">+</span></div>
+          <div class="hstat-lbl">Clients</div>
+          <div class="hstat-note">Across 8+ industries</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="sec sec-soft">
+    <div class="reveal">
+      <div class="stag">What We Do</div>
+      <h2 class="stitle">Five Pillars of <span>Enterprise</span> Excellence</h2>
+      <p class="sdesc">Distinct lines of business, each delivering a holistic solution that complements your enterprise
+        growth and digital transformation journey.</p>
+    </div>
+    <div class="svc-grid reveal">
+      <div class="svc">
+        <div class="svc-num">01</div>
+        <div class="svc-ico">⚡</div>
+        <div class="svc-title">PExTAB Platform</div>
+        <p class="svc-desc">Platform to Expedite Transformation of Any Business — a unified ecosystem for document,
+          workflow, and process automation at enterprise scale.</p>
+        <a class="svc-link" href="#products">Explore →</a>
+      </div>
+      <div class="svc">
+        <div class="svc-num">02</div>
+        <div class="svc-ico">💻</div>
+        <div class="svc-title">Application Development</div>
+        <p class="svc-desc">Bespoke software, mobile apps, QA testing and consultancy. Built around your specific
+          business objectives and tailored to your workflows.</p>
+        <a class="svc-link" href="#contact">Learn More →</a>
+      </div>
+      <div class="svc">
+        <div class="svc-num">03</div>
+        <div class="svc-ico">🗃️</div>
+        <div class="svc-title">Enterprise Digitization</div>
+        <p class="svc-desc">Document scanning, data entry, digital MRD, and data management — transforming physical
+          archives into intelligent, searchable assets.</p>
+        <a class="svc-link" href="#contact">Learn More →</a>
+      </div>
+      <div class="svc">
+        <div class="svc-num">04</div>
+        <div class="svc-ico">📞</div>
+        <div class="svc-title">Contact Center</div>
+        <p class="svc-desc">Inbound and outbound operations staffed by skilled professionals. Efficient, reliable, and
+          cost-effective customer communication at scale.</p>
+        <a class="svc-link" href="#contact">Learn More →</a>
+      </div>
+      <div class="svc">
+        <div class="svc-num">05</div>
+        <div class="svc-ico">🎯</div>
+        <div class="svc-title">RPO Services</div>
+        <p class="svc-desc">Streamline your recruitment process and achieve talent acquisition goals with our end-to-end
+          Recruitment Process Outsourcing solutions.</p>
+        <a class="svc-link" href="#contact">Learn More →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section id="products" class="sec sec-light">
+    <div class="reveal">
+      <div class="stag">Product Suite</div>
+      <h2 class="stitle">The <span>Kare</span> Family</h2>
+      <p class="sdesc">Five purpose-built enterprise products — drag or scroll to explore the full suite.</p>
+    </div>
+    <div class="prod-scroll reveal" id="prodTrack">
+      <div class="prod-track">
+        <div class="pcard">
+          <div class="pcard-top">
+            <div class="pcard-ico">📂</div>
+            <div class="pcard-name">Kare<em>Docs</em></div>
+            <div class="pcard-type">Document Management System</div>
+          </div>
+          <div class="pcard-body">
+            <p class="pcard-desc">Centralized Enterprise Content Management — your single source of truth for all
+              organizational documents.</p>
+            <ul class="pcard-feats">
+              <li>Secure centralized repository</li>
+              <li>Intelligent document retrieval</li>
+              <li>Role-based access control</li>
+              <li>Audit trails &amp; compliance</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-top">
+            <div class="pcard-ico">⚙️</div>
+            <div class="pcard-name">Kare<em>Flow</em></div>
+            <div class="pcard-type">Workflow Automation Platform</div>
+          </div>
+          <div class="pcard-body">
+            <p class="pcard-desc">Strategic transformation with speed — automate complex business processes and
+              approvals end-to-end.</p>
+            <ul class="pcard-feats">
+              <li>Visual workflow designer</li>
+              <li>NOC management automation</li>
+              <li>Multi-system integrations</li>
+              <li>Real-time process monitoring</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-top">
+            <div class="pcard-ico">🖨️</div>
+            <div class="pcard-name">Kare<em>Scan</em></div>
+            <div class="pcard-type">Document Scanning System</div>
+          </div>
+          <div class="pcard-body">
+            <p class="pcard-desc">Streamlined, secure, and accessible document scanning — faster digitization in a
+              time-critical world.</p>
+            <ul class="pcard-feats">
+              <li>Multi-OS scanning support</li>
+              <li>Batch document processing</li>
+              <li>OCR &amp; intelligent indexing</li>
+              <li>Cloud &amp; on-premise options</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-top">
+            <div class="pcard-ico">💼</div>
+            <div class="pcard-name">Kare<em>AP</em></div>
+            <div class="pcard-type">Accounts Payable Solution</div>
+          </div>
+          <div class="pcard-body">
+            <p class="pcard-desc">Redefining AP with smart automation — boosting efficiency, accuracy and control across
+              your financial operations.</p>
+            <ul class="pcard-feats">
+              <li>Automated invoice processing</li>
+              <li>Vendor portal integration</li>
+              <li>Three-way match automation</li>
+              <li>Real-time AP analytics</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-top">
+            <div class="pcard-ico">📍</div>
+            <div class="pcard-name">Kare<em>Trace</em></div>
+            <div class="pcard-type">Physical File Tracking</div>
+          </div>
+          <div class="pcard-body">
+            <p class="pcard-desc">Complete visibility over the movement of critical physical documents across your
+              entire organization.</p>
+            <ul class="pcard-feats">
+              <li>Barcode &amp; RFID tracking</li>
+              <li>Chain of custody logs</li>
+              <li>Location-based reporting</li>
+              <li>Mobile-enabled tracking</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INDUSTRIES -->
+  <section id="industries" class="sec sec-soft">
+    <div class="reveal">
+      <div class="stag">Industries We Serve</div>
+      <h2 class="stitle">Built for <span>Every</span> Sector</h2>
+      <p class="sdesc">Deployed across diverse verticals — helping organizations at every scale digitize, automate and
+        grow with confidence.</p>
+    </div>
+    <div class="ind-grid reveal">
+      <div class="icard">
+        <div class="icard-ico">🏦</div>
+        <div class="icard-name">NBFC &amp; MFI</div>
+        <div class="icard-note">Loan document lifecycle &amp; workflow automation</div>
+      </div>
+      <div class="icard">
+        <div class="icard-ico">💳</div>
+        <div class="icard-name">BFSI</div>
+        <div class="icard-note">Banking &amp; financial services document intelligence</div>
+      </div>
+      <div class="icard">
+        <div class="icard-ico">🏥</div>
+        <div class="icard-name">Healthcare</div>
+        <div class="icard-note">Digital MRD &amp; patient record management</div>
+      </div>
+      <div class="icard">
+        <div class="icard-ico">🚚</div>
+        <div class="icard-name">Logistics</div>
+        <div class="icard-note">Shipping docs, POD &amp; compliance tracking</div>
+      </div>
+      <div class="icard">
+        <div class="icard-ico">🏭</div>
+        <div class="icard-name">Manufacturing</div>
+        <div class="icard-note">Quality docs &amp; supplier management</div>
+      </div>
+      <div class="icard">
+        <div class="icard-ico">🤝</div>
+        <div class="icard-name">NGO</div>
+        <div class="icard-note">Grant docs &amp; beneficiary records</div>
+      </div>
+      <div class="icard">
+        <div class="icard-ico">🏛️</div>
+        <div class="icard-name">Government</div>
+        <div class="icard-note">Public records digitization &amp; compliance</div>
+      </div>
+      <div class="icard">
+        <div class="icard-ico">👥</div>
+        <div class="icard-name">HR &amp; Admin</div>
+        <div class="icard-note">Employee documents &amp; onboarding flows</div>
+      </div>
+      <div class="icard">
+        <div class="icard-ico">📊</div>
+        <div class="icard-name">Finance</div>
+        <div class="icard-note">Invoice automation &amp; AP workflows</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="sec sec-light">
+    <div class="reveal">
+      <div class="stag">Company Overview</div>
+      <h2 class="stitle">14 Years of <span>Trusted</span> Expertise</h2>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-left">
+        <div class="astats">
+          <div class="astat">
+            <div class="astat-num">200<span class="s">+</span></div>
+            <div class="astat-lbl">Projects</div>
+          </div>
+          <div class="astat">
+            <div class="astat-num">70<span class="s">+</span></div>
+            <div class="astat-lbl">Clients</div>
+          </div>
+          <div class="astat">
+            <div class="astat-num">100<span class="s">+</span></div>
+            <div class="astat-lbl">Team Members</div>
+          </div>
+          <div class="astat">
+            <div class="astat-num">14</div>
+            <div class="astat-lbl">Years Active</div>
+          </div>
+          <div class="astat span2">
+            <div class="astat-num">130<span class="s">M</span></div>
+            <div class="astat-lbl">Files Digitized · 10,000+ Daily</div>
+            <div class="astat-sub">Cumulative records processed since 2010</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-right">
+        <div class="about-story">
+          <p>Established in 2010 and headquartered at Carlton Towers, Bangalore, NeoLotex Business Solutions has grown
+            from a regional digitization specialist into a full-spectrum enterprise automation partner — serving clients
+            across India.</p>
+          <p>We believe great technology is only as powerful as the team behind it. That's why our leadership stays
+            involved from requirements through delivery — a commitment our clients consistently call the NeoLotex
+            difference.</p>
+        </div>
+        <div class="about-pts">
+          <div class="apt">
+            <div class="apt-ico">📈</div>
+            <div>
+              <div class="apt-title">Operational Excellence at Scale</div>
+              <div class="apt-desc">10,000+ documents processed daily with a 300% reduction in average turnaround time
+                across client organizations.</div>
+            </div>
+          </div>
+          <div class="apt">
+            <div class="apt-ico">🔒</div>
+            <div>
+              <div class="apt-title">Security-First Architecture</div>
+              <div class="apt-desc">Role-based access, end-to-end audit trails, and compliance-grade controls built into
+                every product from the ground up.</div>
+            </div>
+          </div>
+          <div class="apt">
+            <div class="apt-ico">🤝</div>
+            <div>
+              <div class="apt-title">Partnership Over Transactions</div>
+              <div class="apt-desc">Our clients stay for years. We earn that by being adaptable, responsive, and
+                genuinely invested in their outcomes.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="sec sec-soft">
+    <div class="reveal">
+      <div class="stag">Client Voices</div>
+      <h2 class="stitle">What Our <span>Partners</span> Say</h2>
+      <p class="sdesc">Real words from the enterprises that trust NeoLotex to power their operations every day.</p>
+    </div>
+    <div class="tgrid reveal">
+      <div class="tcard">
+        <div class="tcard-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="tcard-hl">"NeoLotex has been a <span class="red">valuable ally</span> in our journey."</div>
+        <p class="tcard-txt">NeoLotex developed a bespoke solution in quick time and helped streamline our complex
+          reconciliation activity. Renjith and his team impressed us with the intensity of their focus and
+          professionalism — an extremely reliable partner in our growth.</p>
+        <div class="tcard-author">
+          <div class="tav">P</div>
+          <div>
+            <div class="ta-name">Prasad GR</div>
+            <div class="ta-org">Capital Float</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="tcard-hl">"A <span class="red">Catalyst</span> for Innovation and Collaborative Success"</div>
+        <p class="tcard-txt">The flexibility and adaptability to customer requirements is commendable. Involvement from
+          the highest level to execution has helped deliver the right outcome and adds greatly to our satisfaction.</p>
+        <div class="tcard-author">
+          <div class="tav">A</div>
+          <div>
+            <div class="ta-name">Dr. Ashok Nagpal</div>
+            <div class="ta-org">SVP — Vistaar Financial Services</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="tcard-hl">"Defined by <span class="red">innovation</span>, trust and shared success"</div>
+        <p class="tcard-txt">Our entire document management workflow runs on the NeoLotex product suite. They
+          continuously improve their value proposition and we are proud to have them as one of our important technology
+          partners.</p>
+        <div class="tcard-author">
+          <div class="tav">N</div>
+          <div>
+            <div class="ta-name">Nikhil Bandi</div>
+            <div class="ta-org">CIO — Vistaar Finance</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="tcard-hl">"A <span class="red">reliable partner</span> in our transformation."</div>
+        <p class="tcard-txt">Post implementation of KareAP, our vendor onboarding and accounts payable processes became
+          more streamlined. The automation and real-time insights refined our workflows, reduced errors and improved
+          efficiency.</p>
+        <div class="tcard-author">
+          <div class="tav">S</div>
+          <div>
+            <div class="ta-name">Sridhar Srinivasan</div>
+            <div class="ta-org">CFO — Azim Premji Foundation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="band">
+    <div class="band-text">
+      <div class="band-title">Ready to <span>Elevate</span> Your Business?</div>
+      <div class="band-sub">Connect with our team — we respond within 24 hours.</div>
+    </div>
+    <div class="band-btns">
+      <a class="band-btn1" href="#contact">Get In Touch</a>
+      <a class="band-btn2" href="#products">View Products</a>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="sec sec-light">
+    <div class="reveal">
+      <div class="stag">Get In Touch</div>
+      <h2 class="stitle">Let's <span>Start</span> a Conversation</h2>
+      <p class="sdesc">Three fields. That's all we need to get started. Our team will be in touch within 24 hours.</p>
+    </div>
+    <div class="contact-layout reveal">
+      <div>
+        <div class="cinfo-cards">
+          <div class="cicard">
+            <div class="ci-ico">📍</div>
+            <div>
+              <div class="ci-lbl">Office</div>
+              <div class="ci-val">No. 701, A Wing, 7th Floor, Carlton Towers,<br>Old Airport Road, Bangalore – 560008,
+                India</div>
+            </div>
+          </div>
+          <div class="cicard">
+            <div class="ci-ico">📞</div>
+            <div>
+              <div class="ci-lbl">Phone</div>
+              <div class="ci-val"><a href="tel:+919538169692">+91 9538169692</a></div>
+            </div>
+          </div>
+          <div class="cicard">
+            <div class="ci-ico">✉️</div>
+            <div>
+              <div class="ci-lbl">Email</div>
+              <div class="ci-val"><a href="mailto:sales@neolotex.com">sales@neolotex.com</a></div>
+            </div>
+          </div>
+          <div class="cicard">
+            <div class="ci-ico">🌐</div>
+            <div>
+              <div class="ci-lbl">Website</div>
+              <div class="ci-val"><a href="https://neolotex.com" target="_blank">neolotex.com</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="csocials">
+          <a class="csoc" href="https://www.linkedin.com/company/neolotex/" target="_blank">in</a>
+          <a class="csoc" href="https://twitter.com/neolotex" target="_blank">𝕏</a>
+          <a class="csoc" href="https://www.facebook.com/neolotex" target="_blank">f</a>
+          <a class="csoc" href="https://www.instagram.com/neolotex_business_solutions/" target="_blank">ig</a>
+        </div>
+      </div>
+      <div class="cform-card">
+        <div class="cform-title">Send Us a Message</div>
+        <div class="cform-sub">We'll reach out within 24 hours — no spam, ever.</div>
+        <div class="cform">
+          <div class="cff"><label>Full Name</label><input type="text" placeholder="e.g. Rajesh Kumar" /></div>
+          <div class="cff"><label>Email Address</label><input type="email" placeholder="e.g. rajesh@company.com" />
+          </div>
+          <div class="cff"><label>Phone Number</label><input type="tel" placeholder="e.g. +91 98765 43210" /></div>
+          <button class="csubmit" onclick="handleSubmit()">Send Message →</button>
+          <div class="cform-note">🔒 Your information is always kept private.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="ft-grid">
+      <div>
+        <span class="ft-logo"><span class="bl">Neo</span><span class="rd">·</span>Lotex</span>
+        <p class="ft-about">Beyond Digitization — your intelligent automation partner for enterprise document
+          management, workflow automation, and business process solutions. Established 2010, Bangalore, India.</p>
+      </div>
+      <div>
+        <div class="ft-h">Products</div>
+        <ul class="ft-ul">
+          <li><a href="#products">KareDocs</a></li>
+          <li><a href="#products">KareFlow</a></li>
+          <li><a href="#products">KareScan</a></li>
+          <li><a href="#products">KareAP</a></li>
+          <li><a href="#products">KareTrace</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="ft-h">Services</div>
+        <ul class="ft-ul">
+          <li><a href="#services">PExTAB Platform</a></li>
+          <li><a href="#services">App Development</a></li>
+          <li><a href="#services">Enterprise Digitization</a></li>
+          <li><a href="#services">Contact Center</a></li>
+          <li><a href="#services">RPO Services</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="ft-h">Company</div>
+        <ul class="ft-ul">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#industries">Industries</a></li>
+          <li><a href="#testimonials">Clients</a></li>
+          <li><a href="#contact">Careers</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <div class="ft-copy">© 2026 NeoLotex Business Solutions Pvt. Ltd. All rights reserved.</div>
+      <div class="ft-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleNav() { document.getElementById('navLinks').classList.toggle('open') }
+    const io = new IntersectionObserver(e => { e.forEach(el => { if (el.isIntersecting) { el.target.classList.add('visible'); io.unobserve(el.target) } }) }, { threshold: .08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    // drag scroll products
+    const pt = document.getElementById('prodTrack');
+    let down = false, sx, sl;
+    pt.addEventListener('mousedown', e => { down = true; sx = e.pageX - pt.offsetLeft; sl = pt.scrollLeft });
+    pt.addEventListener('mouseleave', () => down = false);
+    pt.addEventListener('mouseup', () => down = false);
+    pt.addEventListener('mousemove', e => { if (!down) return; e.preventDefault(); const x = e.pageX - pt.offsetLeft; pt.scrollLeft = sl - (x - sx) * 1.4 });
+    function handleSubmit() { alert('Thank you! Our team will reach out within 24 hours.') }
+  </script>
+</body>
+
+</html>
