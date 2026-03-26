@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KareDocs — Document Management System | NeoLotex</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ─── DESIGN TOKENS ─── */
+:root{
+  --b:  #0A70B8;   /* brand blue        */
+  --bd: #0E2B82;   /* dark blue         */
+  --n:  #0A1B44;   /* navy              */
+  --r:  #2a16dd;   /* red accent        */
+  --rd: #2907e9;
+  --w:  #FFFFFF;
+  --f:  #F4F8FC;   /* pale blue-white   */
+  --f2: #E8F1FA;
+  --t:  #0A1B44;
+  --tl: #4A6382;
+  --tm: #8FA8C4;
+  --ease:.38s cubic-bezier(.25,.46,.45,.94);
+  --ease-bounce:.5s cubic-bezier(.34,1.56,.64,1);
+  --r4:4px; --r8:8px; --r12:12px; --r16:16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:var(--w);color:var(--t);overflow-x:hidden;font-weight:400}
+img{display:block;max-width:100%}
+a{text-decoration:none}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--b);border-radius:4px}
+
+/* ─── UTILITY ─── */
+.container{max-width:1200px;margin:0 auto;padding:0 5vw}
+.section-tag{display:inline-flex;align-items:center;gap:8px;font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--b);margin-bottom:12px}
+.section-tag::before{content:'';width:20px;height:2px;background:var(--r);border-radius:2px;flex-shrink:0}
+.section-tag::after{content:'';width:20px;height:2px;background:var(--r);border-radius:2px;flex-shrink:0}
+.sec-h{font-size:clamp(2rem,3.5vw,2.9rem);font-weight:700;line-height:1.18;color:var(--n)}
+.sec-h span{color:var(--b)} .sec-h .r{color:var(--r)}
+.sec-p{margin-top:10px;font-size:.9rem;font-weight:300;color:var(--tl);line-height:1.85;max-width:560px}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--b);color:#fff;padding:.82rem 2rem;border-radius:var(--r8);font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(10,112,184,.3);transition:background var(--b),transform .18s,box-shadow .18s}
+.btn-primary:hover{background:var(--bd);transform:translateY(-2px);box-shadow:0 8px 28px rgba(10,112,184,.38)}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--b);padding:.82rem 2rem;border-radius:var(--r8);font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;border:1.5px solid rgba(10,112,184,.35);cursor:pointer;transition:border-color var(--ease),background var(--ease),transform .18s}
+.btn-outline:hover{border-color:var(--b);background:rgba(10,112,184,.06);transform:translateY(-2px)}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.reveal.up{opacity:1;transform:translateY(0)}
+.reveal-l{opacity:0;transform:translateX(-28px);transition:opacity .65s ease,transform .65s ease}
+.reveal-l.up{opacity:1;transform:translateX(0)}
+.reveal-r{opacity:0;transform:translateX(28px);transition:opacity .65s ease,transform .65s ease}
+.reveal-r.up{opacity:1;transform:translateX(0)}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.40s}.d6{transition-delay:.48s}
+
+/* ════════════════════ NAV ════════════════════ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:900;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border-bottom:1px solid rgba(10,112,184,.1);transition:box-shadow var(--ease)}
+.nav.scrolled{box-shadow:0 4px 24px rgba(10,27,68,.08)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--b),var(--bd));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-logo-icon svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-logo-text{font-size:1.15rem;font-weight:800;color:var(--n);line-height:1}
+.nav-logo-text span{color:var(--b)}.nav-logo-sub{font-size:.6rem;font-weight:400;color:var(--tm);letter-spacing:.08em;text-transform:uppercase}
+.nav-links{display:flex;list-style:none;gap:2px}
+.nav-links a{display:block;padding:.42rem .9rem;font-size:.73rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--tl);border-radius:var(--r4);transition:color var(--ease),background var(--b)}
+.nav-links a:hover,.nav-links a.active{color:var(--b);background:rgba(10,112,184,.07)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-phone{font-size:.72rem;font-weight:500;color:var(--n);display:flex;align-items:center;gap:5px}
+.nav-phone svg{width:14px;height:14px;stroke:var(--b);fill:none;stroke-width:2;stroke-linecap:round}
+.nav-demo{background:var(--r);color:#fff;padding:.44rem 1.2rem;border-radius:var(--r4);font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:none;cursor:pointer;transition:background var(--b),transform .15s;box-shadow:0 3px 12px rgba(8, 49, 231, 0.25)}
+.nav-demo:hover{background:var(--rd);transform:translateY(-1px)}
+.hbg{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px}
+.hbg span{width:22px;height:2px;background:var(--n);border-radius:2px;transition:var(--ease)}
+
+/* ════════════════════ HERO ════════════════════ */
+#home{
+  min-height:100vh;padding-top:64px;
+  display:grid;grid-template-columns:1fr 1fr;
+  position:relative;overflow:hidden;
+  background:var(--w);
+}
+/* LEFT panel */
+.hero-left{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 5vw 80px 6vw;
+  position:relative;z-index:2;
+}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--b);margin-bottom:28px;animation:slideUp .6s ease both}
+.hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--r);animation:pulse 2s ease infinite;flex-shrink:0}
+.hero-h1{font-size:clamp(2.5rem,4.5vw,4.4rem);font-weight:800;line-height:1.06;color:var(--n);animation:slideUp .65s ease .08s both}
+.hero-h1 .blue{color:var(--b)}
+.hero-h1 .line2{display:block;font-weight:200;font-size:.55em;color:var(--tm);margin-top:8px;letter-spacing:.04em}
+.hero-sub{max-width:480px;font-size:.92rem;font-weight:300;line-height:1.85;color:var(--tl);margin-top:22px;animation:slideUp .65s ease .16s both}
+.hero-btns{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap;animation:slideUp .65s ease .24s both}
+/* hero trust strip */
+.hero-trust{display:flex;align-items:center;gap:28px;margin-top:44px;padding-top:28px;border-top:1px solid rgba(10,27,68,.07);animation:slideUp .65s ease .36s both;flex-wrap:wrap}
+.htrust-item{display:flex;flex-direction:column}
+.htrust-num{font-size:1.6rem;font-weight:800;color:var(--n);line-height:1}
+.htrust-num sup{font-size:.4em;color:var(--r);vertical-align:super}
+.htrust-lbl{font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--tm);margin-top:2px}
+.htrust-sep{width:1px;height:40px;background:rgba(10,27,68,.1)}
+
+/* RIGHT panel — illustrated card stack */
+.hero-right{
+  position:relative;overflow:hidden;
+  background:linear-gradient(145deg,var(--f) 0%,var(--f2) 100%);
+  display:flex;align-items:center;justify-content:center;
+  padding:60px 40px;
+}
+.hero-right::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;border-radius:50%;background:rgba(10,112,184,.07);pointer-events:none}
+.hero-right::after{content:'';position:absolute;bottom:-40px;left:-40px;width:200px;height:200px;border-radius:50%;background:rgba(227,63,63,.05);pointer-events:none}
+/* Floating doc cards in hero */
+.hero-visual{position:relative;width:100%;max-width:420px;animation:slideUp .65s ease .32s both}
+.hero-doc-main{background:var(--w);border-radius:var(--r16);padding:24px;box-shadow:0 24px 60px rgba(10,27,68,.14);border:1px solid rgba(10,112,184,.1);position:relative;z-index:3}
+.hdm-top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.hdm-ico{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--b),var(--bd));display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdm-ico svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hdm-title{font-size:.88rem;font-weight:700;color:var(--n)}
+.hdm-sub{font-size:.7rem;font-weight:400;color:var(--tm);margin-top:2px}
+.hdm-rows{display:flex;flex-direction:column;gap:10px}
+.hdm-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--f);border-radius:var(--r8);border:1px solid rgba(10,112,184,.07)}
+.hdm-row-left{display:flex;align-items:center;gap:10px}
+.hdm-file-ico{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0}
+.hdm-file-ico.pdf{background:rgba(227,63,63,.1);color:var(--r)}
+.hdm-file-ico.doc{background:rgba(10,112,184,.1);color:var(--b)}
+.hdm-file-ico.xls{background:rgba(16,185,129,.1);color:#059669}
+.hdm-file-name{font-size:.75rem;font-weight:500;color:var(--n)}
+.hdm-file-meta{font-size:.62rem;font-weight:300;color:var(--tm);margin-top:1px}
+.hdm-badge{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:20px}
+.hdm-badge.ok{background:rgba(16,185,129,.1);color:#059669}
+.hdm-badge.rev{background:rgba(245,158,11,.1);color:#D97706}
+/* floating stat cards */
+.hf-card{position:absolute;background:var(--w);border-radius:var(--r12);padding:14px 18px;box-shadow:0 8px 32px rgba(10,27,68,.12);border:1px solid rgba(10,112,184,.1);z-index:4}
+.hf-card.top-right{top:-20px;right:-20px;animation:floatA 4s ease-in-out infinite}
+.hf-card.bot-left{bottom:-16px;left:-24px;animation:floatB 4s ease-in-out infinite 1s}
+.hfc-num{font-size:1.4rem;font-weight:800;color:var(--n);line-height:1}
+.hfc-num sup{font-size:.4em;color:var(--r);vertical-align:super}
+.hfc-lbl{font-size:.6rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--tm);margin-top:2px}
+.hfc-icon{font-size:1.2rem;margin-bottom:6px}
+
+/* ════════════════════ FEATURES ════════════════════ */
+#features{padding:100px 0;background:var(--w)}
+.features-intro{text-align:center;margin-bottom:64px}
+.features-intro .sec-p{margin:0 auto;text-align:center}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(10,112,184,.08);border-radius:var(--r16);overflow:hidden;border:1px solid rgba(10,112,184,.1)}
+.feat-card{background:var(--w);padding:40px 32px;position:relative;overflow:hidden;transition:background var(--ease);cursor:default}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--b),var(--bd));transform:scaleX(0);transform-origin:left;transition:transform var(--ease)}
+.feat-card:hover{background:var(--f)}
+.feat-card:hover::before{transform:scaleX(1)}
+.feat-num{font-size:3.5rem;font-weight:800;color:rgba(10,112,184,.06);line-height:1;margin-bottom:18px;transition:color var(--ease)}
+.feat-card:hover .feat-num{color:rgba(10,112,184,.14)}
+.feat-ico-wrap{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,rgba(10,112,184,.1),rgba(14,43,130,.07));display:flex;align-items:center;justify-content:center;margin-bottom:18px;transition:background var(--ease)}
+.feat-card:hover .feat-ico-wrap{background:linear-gradient(135deg,rgba(10,112,184,.18),rgba(14,43,130,.12))}
+.feat-ico-wrap svg{width:24px;height:24px;stroke:var(--b);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.feat-title{font-size:.98rem;font-weight:700;color:var(--n);margin-bottom:10px}
+.feat-desc{font-size:.82rem;font-weight:300;color:var(--tl);line-height:1.75}
+
+/* ════════════════════ HOW IT WORKS ════════════════════ */
+#how{padding:100px 0;background:var(--f)}
+.how-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:56px}
+/* steps */
+.how-steps{display:flex;flex-direction:column;gap:0}
+.how-step{display:flex;gap:20px;padding:24px 0;border-bottom:1px solid rgba(10,27,68,.07);transition:padding-left var(--ease);cursor:default;position:relative}
+.how-step:hover{padding-left:6px}
+.how-step:last-child{border-bottom:none}
+.hs-num{width:40px;height:40px;border-radius:50%;background:var(--w);border:2px solid rgba(10,112,184,.2);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;color:var(--b);flex-shrink:0;transition:background var(--ease),border-color var(--ease)}
+.how-step:hover .hs-num{background:var(--b);border-color:var(--b);color:#fff}
+.hs-title{font-size:.92rem;font-weight:600;color:var(--n);margin-bottom:5px}
+.hs-desc{font-size:.8rem;font-weight:300;color:var(--tl);line-height:1.7}
+/* visual side */
+.how-visual{position:relative}
+.how-screen{background:var(--n);border-radius:var(--r16);padding:20px;box-shadow:0 24px 60px rgba(10,27,68,.2);overflow:hidden;position:relative}
+.how-screen::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(10,112,184,.15)}
+.how-screen-bar{display:flex;align-items:center;gap:6px;margin-bottom:16px}
+.hsc-dot{width:8px;height:8px;border-radius:50%}
+.hsc-dot.r{background:rgba(227,63,63,.7)}
+.hsc-dot.y{background:rgba(245,158,11,.7)}
+.hsc-dot.g{background:rgba(16,185,129,.7)}
+.how-screen-title{font-size:.65rem;font-weight:600;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;margin-left:auto}
+.hsc-rows{display:flex;flex-direction:column;gap:8px}
+.hsc-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border-radius:var(--r8);padding:10px 14px;border:1px solid rgba(255,255,255,.06)}
+.hsc-row-ico{width:28px;height:28px;border-radius:6px;background:rgba(10,112,184,.25);display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0}
+.hsc-row-name{font-size:.75rem;font-weight:500;color:rgba(255,255,255,.8);flex:1}
+.hsc-row-tag{font-size:.58rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:20px}
+.hsc-row-tag.g{background:rgba(16,185,129,.15);color:#34D399}
+.hsc-row-tag.b{background:rgba(10,112,184,.2);color:#60A5FA}
+.hsc-row-tag.y{background:rgba(245,158,11,.15);color:#FCD34D}
+.hsc-row-date{font-size:.62rem;font-weight:300;color:rgba(255,255,255,.3);white-space:nowrap}
+/* stat overlay */
+.how-stat-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.hstat{background:rgba(10,112,184,.15);border-radius:var(--r8);padding:12px 14px;border:1px solid rgba(10,112,184,.2)}
+.hstat-val{font-size:1.1rem;font-weight:800;color:#fff;line-height:1}
+.hstat-val sup{font-size:.4em;color:var(--b);vertical-align:super}
+.hstat-lbl{font-size:.58rem;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:3px}
+
+/* ════════════════════ USE CASES ════════════════════ */
+#usecases{padding:100px 0;background:var(--w)}
+.uc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:52px}
+.uc-card{background:var(--w);border:1px solid rgba(10,112,184,.12);border-radius:var(--r16);padding:28px 22px;box-shadow:0 2px 16px rgba(10,27,68,.05);transition:transform var(--ease),box-shadow var(--ease),border-color var(--ease);cursor:default}
+.uc-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(10,112,184,.13);border-color:rgba(10,112,184,.28)}
+.uc-ico{font-size:2rem;margin-bottom:14px}
+.uc-title{font-size:.9rem;font-weight:700;color:var(--n);margin-bottom:8px}
+.uc-desc{font-size:.78rem;font-weight:300;color:var(--tl);line-height:1.7}
+
+/* ════════════════════ PRODUCT SUITE ════════════════════ */
+#product{padding:100px 0;background:var(--n);position:relative;overflow:hidden}
+#product::before{content:'';position:absolute;right:-10%;top:-20%;width:60vw;height:60vw;max-width:700px;max-height:700px;border-radius:50%;background:rgba(10,112,184,.08);pointer-events:none}
+#product .sec-h{color:#fff}
+#product .sec-h span{color:var(--b)}
+#product .sec-p{color:rgba(255,255,255,.5)}
+#product .section-tag{color:rgba(10,112,184,.9)}
+.prod-grid{display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-top:56px;align-items:start}
+.prod-main{background:rgba(255,255,255,.04);border:1px solid rgba(10,112,184,.2);border-radius:var(--r16);padding:40px;position:relative;overflow:hidden}
+.prod-main::after{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(10,112,184,.15)}
+.prod-main-tag{font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--b);margin-bottom:10px}
+.prod-main-name{font-size:2.4rem;font-weight:800;color:#fff;line-height:1;margin-bottom:6px}
+.prod-main-name em{color:var(--b);font-style:normal}
+.prod-main-sub{font-size:.85rem;font-weight:300;color:rgba(255,255,255,.5);margin-bottom:28px;line-height:1.7}
+.prod-feats{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+.pf-item{display:flex;align-items:center;gap:12px;font-size:.82rem;font-weight:400;color:rgba(255,255,255,.7)}
+.pf-item::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--b);flex-shrink:0}
+.prod-side{display:flex;flex-direction:column;gap:16px}
+.ps-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--r12);padding:22px;transition:background var(--ease),border-color var(--ease)}
+.ps-card:hover{background:rgba(10,112,184,.1);border-color:rgba(10,112,184,.3)}
+.ps-ico{font-size:1.4rem;margin-bottom:10px}
+.ps-name{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:4px}
+.ps-desc{font-size:.75rem;font-weight:300;color:rgba(255,255,255,.45);line-height:1.6}
+
+/* ════════════════════ TESTIMONIALS ════════════════════ */
+#testimonials{padding:100px 0;background:var(--f)}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:52px}
+.tcard{background:var(--w);border:1px solid rgba(10,27,68,.08);border-radius:var(--r16);padding:32px;box-shadow:0 4px 20px rgba(10,27,68,.06);transition:transform var(--ease),box-shadow var(--ease),border-color var(--ease);display:flex;flex-direction:column}
+.tcard:hover{transform:translateY(-5px);box-shadow:0 16px 44px rgba(10,27,68,.11);border-color:rgba(10,112,184,.2)}
+.tcard-stars{display:flex;gap:3px;margin-bottom:16px}
+.tcard-stars span{font-size:.82rem;color:#F59E0B}
+.tcard-qmark{font-size:3rem;font-weight:800;line-height:.7;color:var(--b);opacity:.12;margin-bottom:8px;font-family:Georgia,serif}
+.tcard-hl{font-size:.85rem;font-weight:600;color:var(--n);margin-bottom:10px;line-height:1.4}
+.tcard-hl .r{color:var(--r)}
+.tcard-txt{font-size:.82rem;font-weight:300;color:var(--tl);line-height:1.8;flex:1}
+.tcard-author{display:flex;align-items:center;gap:12px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(10,27,68,.07)}
+.tav{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--b),var(--bd));display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:700;color:#fff;flex-shrink:0}
+.ta-name{font-size:.86rem;font-weight:600;color:var(--n)}
+.ta-org{font-size:.72rem;font-weight:300;color:var(--tm);margin-top:1px}
+
+/* ════════════════════ STATS BAND ════════════════════ */
+.stats-band{background:linear-gradient(135deg,var(--n),var(--bd));padding:60px 5vw;overflow:hidden;position:relative}
+.stats-band::before{content:'';position:absolute;right:-5%;top:-50%;width:50vw;height:200%;background:rgba(10,112,184,.08);clip-path:polygon(20% 0%,100% 0%,100% 100%,0% 100%);pointer-events:none}
+.stats-band-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;align-items:center;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.sb-item{text-align:center}
+.sb-num{font-size:2.8rem;font-weight:800;color:#fff;line-height:1}
+.sb-num sup{font-size:.38em;color:var(--r);vertical-align:super}
+.sb-lbl{font-size:.65rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:6px}
+
+/* ════════════════════ CONTACT / CTA ════════════════════ */
+#contact{padding:100px 0;background:var(--w)}
+.contact-layout{display:grid;grid-template-columns:1fr 1.15fr;gap:80px;align-items:start;margin-top:56px}
+/* left info */
+.c-info-list{display:flex;flex-direction:column;gap:16px;margin-top:32px}
+.ci-item{display:flex;align-items:flex-start;gap:14px;background:var(--f);border:1px solid rgba(10,112,184,.1);border-radius:var(--r12);padding:18px 20px;transition:border-color var(--ease),transform var(--ease)}
+.ci-item:hover{border-color:rgba(10,112,184,.3);transform:translateX(5px)}
+.ci-ico{width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,var(--b),var(--bd));display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ci-ico svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ci-lbl{font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--b);margin-bottom:3px}
+.ci-val{font-size:.83rem;font-weight:400;color:var(--tl);line-height:1.55}
+.ci-val a{color:inherit;transition:color var(--ease)}
+.ci-val a:hover{color:var(--b)}
+.c-socials{display:flex;gap:10px;margin-top:24px}
+.csoc{width:40px;height:40px;border-radius:8px;border:1.5px solid rgba(10,112,184,.18);background:var(--w);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:var(--tl);text-decoration:none;box-shadow:0 2px 10px rgba(10,27,68,.06);transition:background var(--ease),color var(--ease),border-color var(--ease),transform .15s}
+.csoc:hover{background:var(--b);color:#fff;border-color:var(--b);transform:translateY(-3px)}
+/* right form */
+.c-form-card{background:var(--f);border:1px solid rgba(10,112,184,.12);border-radius:var(--r16);padding:40px;box-shadow:0 4px 24px rgba(10,27,68,.07)}
+.c-form-header{margin-bottom:28px}
+.c-form-title{font-size:1.2rem;font-weight:700;color:var(--n);margin-bottom:5px}
+.c-form-sub{font-size:.82rem;font-weight:300;color:var(--tl)}
+.cform{display:flex;flex-direction:column;gap:16px}
+.cff{display:flex;flex-direction:column;gap:7px}
+.cff label{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tl)}
+.cff input{background:var(--w);border:1.5px solid rgba(10,112,184,.18);color:var(--t);font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:400;border-radius:var(--r8);padding:.88rem 1.1rem;outline:none;transition:border-color var(--ease),box-shadow var(--ease)}
+.cff input::placeholder{color:var(--tm);font-weight:300}
+.cff input:focus{border-color:var(--b);box-shadow:0 0 0 3px rgba(10,112,184,.1)}
+.c-submit{background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;border:none;border-radius:var(--r8);padding:1rem 2.5rem;font-family:'Poppins',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;width:100%;margin-top:4px;box-shadow:0 4px 18px rgba(63, 79, 227, 0.25);transition:transform .15s,box-shadow .15s,background var(--b)}
+.c-submit:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(227,63,63,.38)}
+.c-form-note{font-size:.68rem;font-weight:300;color:var(--tm);text-align:center;margin-top:6px}
+
+/* ════════════════════ THANK YOU ════════════════════ */
+#ty-page{display:none;position:fixed;inset:0;z-index:2000;background:var(--w);flex-direction:column;align-items:center;justify-content:center;padding:40px}
+#ty-page.show{display:flex}
+.ty-box{max-width:520px;width:100%;background:var(--w);border:1px solid rgba(10,112,184,.13);border-radius:var(--r16);padding:52px 44px;box-shadow:0 24px 80px rgba(10,27,68,.12);text-align:center;position:relative;animation:tyPop .5s cubic-bezier(.34,1.56,.64,1) both}
+.ty-check{width:72px;height:72px;border-radius:50%;background:rgba(10,112,184,.08);border:2px solid rgba(10,112,184,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;animation:checkPulse 2.5s ease infinite}
+.ty-check svg{width:32px;height:32px}
+.ty-tag{display:inline-flex;align-items:center;gap:8px;font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--b);margin-bottom:12px}
+.ty-tag::before,.ty-tag::after{content:'';width:18px;height:2px;background:var(--r);border-radius:2px}
+.ty-h{font-size:1.8rem;font-weight:800;color:var(--n);margin-bottom:10px;line-height:1.2}
+.ty-h span{color:var(--b)}
+.ty-div{width:48px;height:2px;background:linear-gradient(90deg,var(--b),var(--r));border-radius:2px;margin:16px auto 18px}
+.ty-sub{font-size:.87rem;font-weight:300;color:var(--tl);line-height:1.8;margin-bottom:28px}
+.ty-info-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.ty-info-card{background:var(--f);border:1px solid rgba(10,112,184,.1);border-radius:10px;padding:14px 10px;text-align:center}
+.ty-info-ico{font-size:1.3rem;margin-bottom:6px}
+.ty-info-lbl{font-size:.6rem;font-weight:600;color:var(--tl);letter-spacing:.06em}
+.ty-info-val{font-size:.75rem;font-weight:700;color:var(--n);margin-top:2px}
+.ty-btns{display:flex;gap:12px;justify-content:center}
+.ty-btn-home{background:var(--b);color:#fff;padding:.72rem 1.7rem;border-radius:var(--r8);font-family:'Poppins',sans-serif;font-size:.74rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(10,112,184,.3);transition:background var(--ease),transform .15s}
+.ty-btn-home:hover{background:var(--bd);transform:translateY(-1px)}
+.ty-btn-web{background:transparent;color:var(--b);padding:.72rem 1.7rem;border-radius:var(--r8);font-family:'Poppins',sans-serif;font-size:.74rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;border:1.5px solid rgba(10,112,184,.3);cursor:pointer;transition:border-color var(--ease),background var(--ease),transform .15s;text-decoration:none;display:inline-flex;align-items:center}
+.ty-btn-web:hover{border-color:var(--b);background:rgba(10,112,184,.06);transform:translateY(-1px)}
+.ty-note{font-size:.68rem;font-weight:300;color:var(--tm);margin-top:18px}
+.confetti{position:absolute;inset:0;border-radius:var(--r16);overflow:hidden;pointer-events:none}
+.cdot{position:absolute;width:6px;height:6px;border-radius:50%;opacity:0;animation:cfFall 1.2s ease forwards}
+
+/* ════════════════════ FOOTER ════════════════════ */
+footer{background:var(--n);border-top:2px solid var(--b);padding:52px 5vw 28px}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.07);max-width:1200px;margin:0 auto}
+.ft-brand-n{font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ft-brand-n .bl{color:var(--b)}.ft-brand-n .rd{color:var(--r)}
+.ft-brand-sub{font-size:.7rem;font-weight:300;color:rgba(255,255,255,.35);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.ft-brand-desc{font-size:.8rem;font-weight:300;color:rgba(255,255,255,.38);line-height:1.75;max-width:250px}
+.ft-col-h{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--b);margin-bottom:14px}
+.ft-ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.ft-ul a{font-size:.8rem;font-weight:300;color:rgba(255,255,255,.4);transition:color var(--ease)}
+.ft-ul a:hover{color:rgba(255,255,255,.8)}
+.ft-bottom{max-width:1200px;margin:24px auto 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.ft-copy{font-size:.72rem;font-weight:300;color:rgba(255,255,255,.28)}
+.ft-legal{display:flex;gap:18px}
+.ft-legal a{font-size:.72rem;font-weight:300;color:rgba(255,255,255,.28);transition:color var(--ease)}
+.ft-legal a:hover{color:rgba(255,255,255,.65)}
+
+/* ════════════════════ ANIMATIONS ════════════════════ */
+@keyframes slideUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.6)}}
+@keyframes floatA{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}
+@keyframes floatB{0%,100%{transform:translateY(0) rotate(1deg)}50%{transform:translateY(-8px) rotate(-1deg)}}
+@keyframes tyPop{from{opacity:0;transform:scale(.88) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes checkPulse{0%,100%{box-shadow:0 0 0 0 rgba(10,112,184,.18)}50%{box-shadow:0 0 0 10px rgba(10,112,184,0)}}
+@keyframes cfFall{0%{opacity:1;transform:translateY(-10px) rotate(0)}100%{opacity:0;transform:translateY(130px) rotate(400deg)}}
+@keyframes drawCheck{to{stroke-dashoffset:0}}
+
+/* ════════════════════ RESPONSIVE ════════════════════ */
+@media(max-width:960px){
+  .nav-links{display:none}
+  .nav-links.open{display:flex;flex-direction:column;gap:0;position:fixed;top:64px;left:0;right:0;background:rgba(255,255,255,.98);border-bottom:1px solid rgba(10,112,184,.12);padding:10px 5vw 18px;z-index:899;box-shadow:0 8px 24px rgba(10,27,68,.08)}
+  .hbg{display:flex}
+  #home{grid-template-columns:1fr}
+  .hero-right{display:none}
+  .how-layout,.contact-layout{grid-template-columns:1fr;gap:40px}
+  .prod-grid{grid-template-columns:1fr}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .stats-band-inner{grid-template-columns:repeat(2,1fr)}
+  .ft-grid{grid-template-columns:1fr 1fr;gap:28px}
+}
+@media(max-width:600px){
+  .feat-grid{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr}
+  .stats-band-inner{grid-template-columns:1fr 1fr}
+  .ty-info-row{grid-template-columns:1fr}
+  .hero-trust{gap:18px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="#home">
+    <!-- <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24"><rect x="4" y="3" width="12" height="15" rx="1"/><path d="M8 7h6M8 10h6M8 13h4"/><path d="M16 8l4 4-4 4"/></svg>
+    </div> -->
+    <div>
+      <img src="" alt="">
+      <!-- <div class="nav-logo-text"><span>Kare</span>Docs</div> -->
+       <img src="img/NeoLotex-Logo-Recreation-Jpeg-01-500x138.jpg.bv-removebg-preview.png" alt style="width: 130px;">
+      <!-- <div class="nav-logo-sub">by NeoLotex</div> -->
+    </div>
+  </a>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#usecases">Use Cases</a></li>
+    <li><a href="#product">Product Suite</a></li>
+    <li><a href="#testimonials">Clients</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <div class="nav-phone">
+      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.06 2.18 2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/></svg>
+      +91 9538169692
+    </div>
+    <a class="nav-demo" href="#contact">Get Demo</a>
+    <div class="hbg" id="hbg" onclick="toggleNav()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section id="home">
+  <div class="hero-left">
+    <div class="hero-eyebrow"><span class="dot"></span>Document Management System · KareDocs</div>
+    <h1 class="hero-h1">
+      Control Every<br>
+      <span class="blue">Document</span><br>
+      <span class="line2">Centralized · Secured · Intelligent</span>
+    </h1>
+    <p class="hero-sub">KareDocs is NeoLotex's enterprise grade Document Management System built to centralize, secure, and streamline how your organization captures, stores, retrieves, and governs critical documents at any scale.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="#contact">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13 12H3"/></svg>
+        Request a Demo
+      </a>
+      <a class="btn-outline" href="#features">Explore Features</a>
+    </div>
+    <div class="hero-trust">
+      <div class="htrust-item">
+        <div class="htrust-num">130<sup>M</sup></div>
+        <div class="htrust-lbl">Files Digitized</div>
+      </div>
+      <div class="htrust-sep"></div>
+      <div class="htrust-item">
+        <div class="htrust-num">300<sup>%</sup></div>
+        <div class="htrust-lbl">Faster Retrieval</div>
+      </div>
+      <div class="htrust-sep"></div>
+      <div class="htrust-item">
+        <div class="htrust-num">70<sup>+</sup></div>
+        <div class="htrust-lbl">Enterprise Clients</div>
+      </div>
+      <div class="htrust-sep"></div>
+      <div class="htrust-item">
+        <div class="htrust-num">14</div>
+        <div class="htrust-lbl">Years Expertise</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-visual">
+      <!-- Floating stat cards -->
+      <div class="hf-card top-right">
+        <div class="hfc-icon">📂</div>
+        <div class="hfc-num">10K<sup>+</sup></div>
+        <div class="hfc-lbl">Docs/day</div>
+      </div>
+      <div class="hf-card bot-left">
+        <div class="hfc-icon">🔒</div>
+        <div class="hfc-num">99.9<sup>%</sup></div>
+        <div class="hfc-lbl">Uptime SLA</div>
+      </div>
+      <!-- Main doc card -->
+      <div class="hero-doc-main">
+        <div class="hdm-top">
+          <div class="hdm-ico">
+            <svg viewBox="0 0 24 24"><rect x="4" y="3" width="12" height="15" rx="1"/><path d="M8 7h6M8 10h6M8 13h4"/></svg>
+          </div>
+          <div>
+            <div class="hdm-title">Document Repository</div>
+            <div class="hdm-sub">KareDocs v4.2 · 3 active users</div>
+          </div>
+        </div>
+        <div class="hdm-rows">
+          <div class="hdm-row">
+            <div class="hdm-row-left">
+              <div class="hdm-file-ico pdf">PDF</div>
+              <div>
+                <div class="hdm-file-name">Loan_Agreement_VF_2024.pdf</div>
+                <div class="hdm-file-meta">2.4 MB · Edited 2h ago</div>
+              </div>
+            </div>
+            <span class="hdm-badge ok">Approved</span>
+          </div>
+          <div class="hdm-row">
+            <div class="hdm-row-left">
+              <div class="hdm-file-ico doc">DOC</div>
+              <div>
+                <div class="hdm-file-name">KYC_Checklist_Q1_2025.docx</div>
+                <div class="hdm-file-meta">890 KB · Edited 5h ago</div>
+              </div>
+            </div>
+            <span class="hdm-badge rev">In Review</span>
+          </div>
+          <div class="hdm-row">
+            <div class="hdm-row-left">
+              <div class="hdm-file-ico xls">XLS</div>
+              <div>
+                <div class="hdm-file-name">Vendor_Invoice_March_2025.xlsx</div>
+                <div class="hdm-file-meta">1.1 MB · Edited 1d ago</div>
+              </div>
+            </div>
+            <span class="hdm-badge ok">Processed</span>
+          </div>
+          <div class="hdm-row">
+            <div class="hdm-row-left">
+              <div class="hdm-file-ico pdf">PDF</div>
+              <div>
+                <div class="hdm-file-name">Compliance_Audit_Report.pdf</div>
+                <div class="hdm-file-meta">4.2 MB · Edited 2d ago</div>
+              </div>
+            </div>
+            <span class="hdm-badge ok">Approved</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ STATS BAND ══════════════ -->
+<div class="stats-band">
+  <div class="stats-band-inner">
+    <div class="sb-item reveal d1">
+      <div class="sb-num">130<sup>M</sup></div>
+      <div class="sb-lbl">Files Digitized Till Date</div>
+    </div>
+    <div class="sb-item reveal d2">
+      <div class="sb-num">10K<sup>+</sup></div>
+      <div class="sb-lbl">Documents Processed Daily</div>
+    </div>
+    <div class="sb-item reveal d3">
+      <div class="sb-num">300<sup>%</sup></div>
+      <div class="sb-lbl">Reduction in Average TAT</div>
+    </div>
+    <div class="sb-item reveal d4">
+      <div class="sb-num">99.9<sup>%</sup></div>
+      <div class="sb-lbl">System Uptime SLA</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ FEATURES ══════════════ -->
+<section id="features">
+  <div class="container">
+    <div class="features-intro reveal">
+      <div class="section-tag">Core Capabilities</div>
+      <h2 class="sec-h">Everything You Need to Manage<br><span>Documents at Enterprise Scale</span></h2>
+      <p class="sec-p">KareDocs is engineered with features that eliminate document chaos — from intelligent indexing to end-to-end audit compliance.</p>
+    </div>
+    <div class="feat-grid reveal">
+      <div class="feat-card">
+        <div class="feat-num">01</div>
+        <div class="feat-ico-wrap">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="feat-title">Enterprise Search</div>
+        <p class="feat-desc">With OCR-based full-text search, easily locate the documents you need in no time. Discover unparalleled speed and efficiency in locating documents across various contexts and departments.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">02</div>
+        <div class="feat-ico-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div class="feat-title">Versatile File Management</div>
+        <p class="feat-desc">KareDocs understands your diverse data needs, therefore we handle all file types - from images, documents, to media files, and zip files.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">03</div>
+        <div class="feat-ico-wrap">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="feat-title">Role-Based Access Control</div>
+        <p class="feat-desc">Define granular permissions at folder, document, or field level. Ensure only authorized users can view, edit, or share sensitive documents.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">04</div>
+        <div class="feat-ico-wrap">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="feat-title">Workflow Automation</div>
+        <p class="feat-desc">Automate document routing, approvals, and escalations. Build custom workflows without code slash TAT by up to 300% across departments.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">05</div>
+        <div class="feat-ico-wrap">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="feat-title">Compliance & Audit Trails</div>
+        <p class="feat-desc">Every action is logged who accessed, edited, or shared a document and when. Stay audit-ready for regulators, internal teams, and clients.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">06</div>
+        <div class="feat-ico-wrap">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="feat-title">Version Control</div>
+        <p class="feat-desc">Track every revision of every document. Restore any previous version instantly, compare changes, and maintain a complete edit history.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">07</div>
+        <div class="feat-ico-wrap">
+          <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        </div>
+        <div class="feat-title">Analytics & Reporting</div>
+        <p class="feat-desc">Real-time dashboards on document volumes, user activity, workflow status, and compliance metrics. Export reports for leadership review.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">08</div>
+        <div class="feat-ico-wrap">
+          <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <div class="feat-title">Intelligent Data Processing (IDP)</div>
+        <p class="feat-desc">Leveraging AI innovations, KareDocs enables smooth and unified extraction and retrieval of data from both structured and unstructured data types.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">09</div>
+        <div class="feat-ico-wrap">
+          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        </div>
+        <div class="feat-title">On-Premise & Cloud Deployment</div>
+        <p class="feat-desc">Deploy KareDocs on your own servers or in the cloud. Hybrid models supported. Full data sovereignty with enterprise-grade encryption.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ HOW IT WORKS ══════════════ -->
+<section id="how">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Simple Process</div>
+      <h2 class="sec-h">How <span>KareDocs</span> Works</h2>
+      <p class="sec-p">From document capture to intelligent retrieval the entire journey is automated, secure, and auditable.</p>
+    </div>
+    <div class="how-layout">
+      <div class="how-steps reveal-l">
+        <div class="how-step">
+          <div class="hs-num">01</div>
+          <div>
+            <div class="hs-title">Capture & Digitize</div>
+            <p class="hs-desc">Bring all your documents into one system from physical files, emails, uploads, or existing applications. KareDocs ensures every document is captured accurately and ready for processing.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="hs-num">02</div>
+          <div>
+            <div class="hs-title">Organize & Structure</div>
+            <p class="hs-desc">Documents are automatically organized using intelligent classification and metadata tagging, making them easy to manage without manual effort.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="hs-num">03</div>
+          <div>
+            <div class="hs-title">Automate & Process</div>
+            <p class="hs-desc">Streamline document movement with automated workflows for approvals, validations, and processing reducing delays and manual follow-ups.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="hs-num">04</div>
+          <div>
+            <div class="hs-title">Store Securely</div>
+            <p class="hs-desc">Approved documents are stored in a highly secure environment with controlled access, version history, and complete data protection whether on premise, cloud, or hybrid. your data stays where you need it.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="hs-num">05</div>
+          <div>
+            <div class="hs-title">Retrieve in Seconds</div>
+            <p class="hs-desc">Any document can be found in under 3 seconds using full-text search, metadata filters, or saved search queries. Share securely with internal or external stakeholders via permissions-controlled links.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-visual reveal-r">
+        <div class="how-screen">
+          <div class="how-screen-bar">
+            <div class="hsc-dot r"></div>
+            <div class="hsc-dot y"></div>
+            <div class="hsc-dot g"></div>
+            <div class="how-screen-title">KareDocs Repository</div>
+          </div>
+          <div class="hsc-rows">
+            <div class="hsc-row">
+              <div class="hsc-row-ico">📄</div>
+              <div class="hsc-row-name">KYC_Customer_0041.pdf</div>
+              <span class="hsc-row-tag g">Approved</span>
+              <div class="hsc-row-date">Today</div>
+            </div>
+            <div class="hsc-row">
+              <div class="hsc-row-ico">📋</div>
+              <div class="hsc-row-name">Invoice_VendorA_Mar25.pdf</div>
+              <span class="hsc-row-tag b">Processing</span>
+              <div class="hsc-row-date">Today</div>
+            </div>
+            <div class="hsc-row">
+              <div class="hsc-row-ico">🗂️</div>
+              <div class="hsc-row-name">LoanAgreement_CF_2025.docx</div>
+              <span class="hsc-row-tag y">In Review</span>
+              <div class="hsc-row-date">Yesterday</div>
+            </div>
+            <div class="hsc-row">
+              <div class="hsc-row-ico">📊</div>
+              <div class="hsc-row-name">AuditReport_Q1_2025.xlsx</div>
+              <span class="hsc-row-tag g">Approved</span>
+              <div class="hsc-row-date">2 days ago</div>
+            </div>
+            <div class="hsc-row">
+              <div class="hsc-row-ico">📜</div>
+              <div class="hsc-row-name">CompliancePolicy_v3.pdf</div>
+              <span class="hsc-row-tag g">Active</span>
+              <div class="hsc-row-date">3 days ago</div>
+            </div>
+          </div>
+          <div class="how-stat-bar">
+            <div class="hstat">
+              <div class="hstat-val">12,480</div>
+              <div class="hstat-lbl">Total Docs</div>
+            </div>
+            <div class="hstat">
+              <div class="hstat-val">98<sup>%</sup></div>
+              <div class="hstat-lbl">Indexed</div>
+            </div>
+            <div class="hstat">
+              <div class="hstat-val">0.8s</div>
+              <div class="hstat-lbl">Avg Retrieval</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ USE CASES ══════════════ -->
+<section id="usecases">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Who It's Built For</div>
+      <h2 class="sec-h">Industries That <span>Rely</span> on KareDocs</h2>
+      <p class="sec-p">From regulated financial services to complex healthcare archives KareDocs adapts to your industry's specific document governance needs.</p>
+    </div>
+    <div class="uc-grid">
+      <div class="uc-card reveal d1">
+        <div class="uc-ico">🏦</div>
+        <div class="uc-title">NBFC & Microfinance</div>
+        <p class="uc-desc">Manage loan files, KYC documents, disbursement records, and NOC workflows — all in one compliant, auditable system integrated with your LOS.</p>
+      </div>
+      <div class="uc-card reveal d2">
+        <div class="uc-ico">💳</div>
+        <div class="uc-title">Banking & BFSI</div>
+        <p class="uc-desc">Centralize account opening docs, credit reports, and regulatory filings. Instant retrieval for RBI audits and internal compliance reviews.</p>
+      </div>
+      <div class="uc-card reveal d3">
+        <div class="uc-ico">🏥</div>
+        <div class="uc-title">Healthcare</div>
+        <p class="uc-desc">Digitize MRDs, patient records, and consent forms. Ensure HIPAA-aligned access controls and rapid retrieval for clinical staff and auditors.</p>
+      </div>
+      <div class="uc-card reveal d4">
+        <div class="uc-ico">🏭</div>
+        <div class="uc-title">Manufacturing</div>
+        <p class="uc-desc">Manage SOPs, quality certificates, supplier contracts, and audit documents. Version control ensures teams always access the latest approved documents.</p>
+      </div>
+      <div class="uc-card reveal d1">
+        <div class="uc-ico">🏛️</div>
+        <div class="uc-title">Government Agencies</div>
+        <p class="uc-desc">Digitize physical archives, automate citizen service document flows, and maintain tamper-proof records for public accountability and RTI compliance.</p>
+      </div>
+      <div class="uc-card reveal d2">
+        <div class="uc-ico">🚚</div>
+        <div class="uc-title">Logistics</div>
+        <p class="uc-desc">Centralize BOLs, PODs, customs docs, and vehicle records. Automated routing ensures the right document reaches the right person at the right time.</p>
+      </div>
+      <div class="uc-card reveal d3">
+        <div class="uc-ico">📊</div>
+        <div class="uc-title">Finance & Accounts</div>
+        <p class="uc-desc">Automate the full AP cycle — vendor invoices, purchase orders, and payment approvals — integrated with ERP for seamless three-way matching.</p>
+      </div>
+      <div class="uc-card reveal d4">
+        <div class="uc-ico">👥</div>
+        <div class="uc-title">HR & Administration</div>
+        <p class="uc-desc">Manage employee files, offer letters, appraisals, exit documents, and policy acknowledgements in a secure, searchable, people-ready repository.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PRODUCT SUITE ══════════════ -->
+<section id="product">
+  <div class="container" style="position:relative;z-index:2">
+    <div class="reveal">
+      <div class="section-tag">Full Product Ecosystem</div>
+      <h2 class="sec-h">KareDocs is Part of the<br><span>Kare</span> Suite</h2>
+      <p class="sec-p">KareDocs integrates seamlessly with the full NeoLotex product family — creating a connected enterprise automation ecosystem.</p>
+    </div>
+    <div class="prod-grid reveal">
+      <div class="prod-main">
+        <div class="prod-main-tag">Flagship Product</div>
+        <div class="prod-main-name">Kare<em>Docs</em></div>
+        <div class="prod-main-sub">Enterprise Content Management System — your centralized, intelligent hub for all organizational documents. Trusted by 70+ enterprises across BFSI, Healthcare, and Manufacturing.</div>
+        <div class="prod-feats">
+          <div class="pf-item">Centralized document repository with intelligent indexing</div>
+          <div class="pf-item">Full-text OCR search across millions of documents</div>
+          <div class="pf-item">Role-based access control with granular permissions</div>
+          <div class="pf-item">Complete audit trail and version history</div>
+          <div class="pf-item">Automated workflow routing and approval chains</div>
+          <div class="pf-item">On-premise, cloud, and hybrid deployment options</div>
+          <div class="pf-item">REST API integrations with LOS, ERP, CRM systems</div>
+        </div>
+        <a class="btn-primary" href="#contact">Schedule a Free Demo</a>
+      </div>
+      <div class="prod-side">
+        <div class="ps-card">
+          <div class="ps-ico">⚙️</div>
+          <div class="ps-name">KareFlow</div>
+          <p class="ps-desc">Workflow Automation Platform — automate any business process with visual workflow designer, escalations, and SLA tracking.</p>
+        </div>
+        <div class="ps-card">
+          <div class="ps-ico">🖨️</div>
+          <div class="ps-name">KareScan</div>
+          <p class="ps-desc">Document Scanning System — bulk OCR scanning with intelligent indexing. Multi-OS support, on-site and off-site scanning services.</p>
+        </div>
+        <div class="ps-card">
+          <div class="ps-ico">💼</div>
+          <div class="ps-name">KareAP</div>
+          <p class="ps-desc">Accounts Payable Solution — end-to-end invoice automation, vendor portal, three-way matching, and real-time AP analytics.</p>
+        </div>
+        <div class="ps-card">
+          <div class="ps-ico">📍</div>
+          <div class="ps-name">KareTrace</div>
+          <p class="ps-desc">Physical File Tracking — barcode and RFID-based tracking of physical documents with chain of custody logs and mobile support.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TESTIMONIALS ══════════════ -->
+<section id="testimonials">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Client Voices</div>
+      <h2 class="sec-h">What Our <span>Clients</span> Say</h2>
+      <p class="sec-p">Enterprises that chose KareDocs report measurable improvements in retrieval speed, compliance posture, and operational efficiency.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="tcard reveal d1">
+        <div class="tcard-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="tcard-qmark">"</div>
+        <div class="tcard-hl">"A partnership defined by <span class="r">innovation</span>, trust, and shared success"</div>
+        <p class="tcard-txt">Our entire document management and operations workflow runs on the NeoLotex product suite. They continuously improve their value proposition — supporting multiple OS platforms, enhancing UI, and improving operational controls. We are glad to count them as an important technology partner.</p>
+        <div class="tcard-author">
+          <div class="tav">N</div>
+          <div>
+            <div class="ta-name">Nikhil Bandi</div>
+            <div class="ta-org">SVP, CIO & Head of Operations — Vistaar Finance</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard reveal d2">
+        <div class="tcard-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="tcard-qmark">"</div>
+        <div class="tcard-hl">"NeoLotex has been a <span class="r">reliable partner</span> in our transformation."</div>
+        <p class="tcard-txt">Post implementation of KareAP and KareDocs, our vendor onboarding and accounts payable processes have become more streamlined. The automation and real-time insights refined our workflows, reduced errors, and improved efficiency significantly across the organization.</p>
+        <div class="tcard-author">
+          <div class="tav">S</div>
+          <div>
+            <div class="ta-name">Sridhar Srinivasan</div>
+            <div class="ta-org">Chief Financial Officer — Azim Premji Foundation</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard reveal d3">
+        <div class="tcard-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <div class="tcard-qmark">"</div>
+        <div class="tcard-hl">"NeoLotex has been a <span class="r">valuable ally</span> in our journey."</div>
+        <p class="tcard-txt">NeoLotex developed a bespoke solution in quick time and helped streamline our complex reconciliation activity. Renjith and his team were ever-willing to make changes and impressed us with the intensity of their focus and professionalism.</p>
+        <div class="tcard-author">
+          <div class="tav">P</div>
+          <div>
+            <div class="ta-name">Prasad GR</div>
+            <div class="ta-org">Capital Float</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CONTACT ══════════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Get In Touch</div>
+      <h2 class="sec-h">See KareDocs in <span>Action</span></h2>
+      <p class="sec-p">Book a personalized demo tailored to your industry and document management challenges. Our team responds within 24 hours.</p>
+    </div>
+    <div class="contact-layout reveal">
+      <!-- left -->
+      <div>
+        <div class="c-info-list">
+          <div class="ci-item">
+            <div class="ci-ico">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="ci-lbl">Office</div>
+              <div class="ci-val">No. 701, A Wing, 7th Floor, Carlton Towers,<br>Old Airport Road, Bangalore – 560008, India</div>
+            </div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-ico">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81 19.79 19.79 0 01.06 2.18 2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/></svg>
+            </div>
+            <div>
+              <div class="ci-lbl">Phone</div>
+              <div class="ci-val"><a href="tel:+919538169692">+91 9538169692</a></div>
+            </div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-ico">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="ci-lbl">Email</div>
+              <div class="ci-val"><a href="mailto:sales@neolotex.com">sales@neolotex.com</a></div>
+            </div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-ico">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            </div>
+            <div>
+              <div class="ci-lbl">Website</div>
+              <div class="ci-val"><a href="https://neolotex.com" target="_blank">neolotex.com</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="c-socials">
+          <a class="csoc" href="https://www.linkedin.com/company/neolotex/" target="_blank">in</a>
+          <a class="csoc" href="https://twitter.com/neolotex" target="_blank">𝕏</a>
+          <a class="csoc" href="https://www.facebook.com/neolotex" target="_blank">f</a>
+          <a class="csoc" href="https://www.instagram.com/neolotex_business_solutions/" target="_blank">ig</a>
+        </div>
+      </div>
+      <!-- right form -->
+      <div class="c-form-card">
+        <div class="c-form-header">
+          <div class="c-form-title">Request a Free KareDocs Demo</div>
+          <div class="c-form-sub">Three fields. Our team does the rest — within 24 hours.</div>
+        </div>
+        <div class="cform">
+          <div class="cff">
+            <label>Full Name</label>
+            <input type="text" id="f-name" placeholder="e.g. Rajesh Kumar"/>
+          </div>
+          <div class="cff">
+            <label>Email Address</label>
+            <input type="email" id="f-email" placeholder="e.g. rajesh@company.com"/>
+          </div>
+          <div class="cff">
+            <label>Phone Number</label>
+            <input type="tel" id="f-phone" placeholder="e.g. +91 98765 43210"/>
+          </div>
+          <button class="c-submit" onclick="handleSubmit()">Book My Demo →</button>
+          <div class="c-form-note">🔒 Your information is always kept private. No spam, ever.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ THANK YOU PAGE ══════════════ -->
+<div id="ty-page">
+  <div class="ty-box" id="tyBox">
+    <div class="confetti" id="confetti"></div>
+    <div class="ty-check">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="17" stroke="#0A70B8" stroke-width="1.8"/>
+        <path id="chk" d="M10 18.5L15.5 24L26 13" stroke="#0A70B8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="ty-tag">Message Received</div>
+    <h2 class="ty-h">Thank You for<br><span>Reaching Out!</span></h2>
+    <div class="ty-div"></div>
+    <p class="ty-sub">We've received your demo request for <strong>KareDocs</strong>. Our team will get in touch within <strong>24 hours</strong> to schedule a personalized walkthrough for your organization.</p>
+    <div class="ty-info-row">
+      <div class="ty-info-card">
+        <div class="ty-info-ico">⚡</div>
+        <div class="ty-info-lbl">Response Time</div>
+        <div class="ty-info-val">Within 24 hrs</div>
+      </div>
+      <div class="ty-info-card">
+        <div class="ty-info-ico">🏢</div>
+        <div class="ty-info-lbl">Our Office</div>
+        <div class="ty-info-val">Bangalore, India</div>
+      </div>
+      <div class="ty-info-card">
+        <div class="ty-info-ico">📞</div>
+        <div class="ty-info-lbl">Direct Line</div>
+        <div class="ty-info-val">+91 95381 69692</div>
+      </div>
+    </div>
+    <div class="ty-btns">
+      <button class="ty-btn-home" onclick="goHome()">← Back to Home</button>
+      <a class="ty-btn-web" href="https://neolotex.com" target="_blank">Visit neolotex.com</a>
+    </div>
+    <div class="ty-note">📧 Can't wait? Call us directly at +91 9538169692 or email sales@neolotex.com</div>
+  </div>
+</div>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="ft-grid">
+    <div>
+      <img src="img/NeoLotex-Logo-Recreation-Jpeg-01-500x138.jpg.bv-removebg-preview.png" alt style="width: 176px;">
+
+      <!-- <div class="ft-brand-n"><span class="bl">Kare</span>Docs <span style="font-size:.7em;font-weight:300;color:rgba(255,255,255,.3)">by</span> <span class="rd">Neo</span>Lotex</div> -->
+      <div class="ft-brand-sub">Document Management System</div>
+      <p class="ft-brand-desc">KareDocs is NeoLotex's enterprise-grade Document Management System trusted by 70+ organizations across India for centralized, secure, and intelligent document governance since 2010.</p>
+    </div>
+    <div>
+      <div class="ft-col-h">Product</div>
+      <ul class="ft-ul">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#usecases">Use Cases</a></li>
+        <li><a href="#product">Full Suite</a></li>
+        <li><a href="https://neolotex.com/pricing/">Pricing</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-col-h">Company</div>
+      <ul class="ft-ul">
+        <li><a href="https://neolotex.com/about">About NeoLotex</a></li>
+        <li><a href="https://neolotex.com/case-study">Case Studies</a></li>
+        <li><a href="https://neolotex.com/blog">Blog</a></li>
+        <li><a href="https://neolotex.com/jobs/">Careers</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-col-h">More Products</div>
+      <ul class="ft-ul">
+        <li><a href="https://neolotex.com/products/kareflow/">KareFlow</a></li>
+        <li><a href="https://neolotex.com/products/karescan/">KareScan</a></li>
+        <li><a href="https://neolotex.com/products/kareap/">KareAP</a></li>
+        <li><a href="https://neolotex.com/products/karetrace/">KareTrace</a></li>
+        <li><a href="https://neolotex.com/pextab/">PExTAB Platform</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <div class="ft-copy">© 2026 NeoLotex Business Solutions Pvt. Ltd. All rights reserved.</div>
+    <div class="ft-legal">
+      <a href="https://neolotex.com/privacy-policy">Privacy Policy</a>
+      <a href="https://neolotex.com/terms-of-use/">Terms of Use</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Nav ── */
+function toggleNav(){document.getElementById('navLinks').classList.toggle('open')}
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);
+  // active nav link
+  const secs=['home','features','how','usecases','product','testimonials','contact'];
+  let cur='';
+  secs.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top<=80)cur=id;
+  });
+  document.querySelectorAll('.nav-links a').forEach(a=>{
+    a.classList.toggle('active',a.getAttribute('href')==='#'+cur);
+  });
+});
+
+/* ── Scroll reveal ── */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('up');io.unobserve(e.target)}});
+},{threshold:.08});
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>io.observe(el));
+
+/* ── Form submit ── */
+function handleSubmit(){
+  const name=document.getElementById('f-name').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  const phone=document.getElementById('f-phone').value.trim();
+  if(!name){alert('Please enter your name.');return}
+  if(!email||!email.includes('@')){alert('Please enter a valid email address.');return}
+  if(!phone){alert('Please enter your phone number.');return}
+  // show thank you
+  document.getElementById('ty-page').classList.add('show');
+  document.body.style.overflow='hidden';
+  // animate check
+  setTimeout(()=>{
+    const p=document.getElementById('chk');
+    if(p){const l=p.getTotalLength();p.style.strokeDasharray=l;p.style.strokeDashoffset=l;p.style.transition='stroke-dashoffset .65s ease .2s';p.style.strokeDashoffset=0;}
+  },80);
+  spawnConfetti();
+}
+function spawnConfetti(){
+  const c=document.getElementById('confetti');c.innerHTML='';
+  const cols=['#0A70B8','#E33F3F','#0E2B82','#0A1B44','#8FA8C4','#EBF2FA'];
+  for(let i=0;i<34;i++){
+    const d=document.createElement('div');d.className='cdot';
+    d.style.cssText=`left:${Math.random()*100}%;top:-6px;background:${cols[Math.floor(Math.random()*cols.length)]};width:${Math.random()*7+4}px;height:${Math.random()*7+4}px;animation-delay:${Math.random()*.9}s;animation-duration:${.8+Math.random()*.7}s;border-radius:${Math.random()>.5?'50%':'3px'};`;
+    c.appendChild(d);
+  }
+}
+function goHome(){
+  document.getElementById('ty-page').classList.remove('show');
+  document.body.style.overflow='';
+  ['f-name','f-email','f-phone'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('home').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
